@@ -1,0 +1,6 @@
+Could be used like this:
+	make all
+	./server &
+	./client <filename>
+	kill %1
+Note that file should be already exist and could be opened by the server

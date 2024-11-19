@@ -1,0 +1,6 @@
+Could be used like this:
+	./writer < /etc/services &
+	./reader > out.txt
+	diff /etc/services out.txt
+
+Note /etc/services could be changed to any other file's name that the writer could open

@@ -1,0 +1,5 @@
+Could be used like this: 
+	make all
+	./49_1 <src file. <dest file>
+
+Note that src file should exist already

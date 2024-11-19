@@ -1,0 +1,22 @@
+(Server reads, and client writes)
+
+To see non-blocking open for write fail because the read end is not opened :
+./server &	(creates the FIFO but does not open read end) 
+./client	(non-blocking open for the write end --> fail)
+
+To see non-blocking open for read always succeed immediately even if the write end is not opened:
+./server 1	(creates the FIFO and non-blocking open for the read end --> ok)
+
+To see non-blocking read gets EOF because the write end wrote nothing though it is opened:
+./server 2 &	(create the FIFO and blocking open for read, changes to non-blocking after open() is done, then attempts to read)
+./client 1	(blocking open for write, changes to non-blocking after open, then does not even write)
+
+To see non-blocking read fail because the write end is not opened when reading:
+./server 3      (creates the FIFO and non-blocking open for the read end, then attempts to read)
+
+To see non-blocking write fail because the read end is not opened when writing:
+./server 4 &	(creates the FIFO and blocking open for read, close it right after)
+./client 2	(blocking open for write, changes to non-blocking after open, wait for read end to close, then attempts to write)
+
+
+

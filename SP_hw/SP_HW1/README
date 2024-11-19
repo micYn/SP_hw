@@ -1,0 +1,4 @@
+make all
+./tee [-a] file		# stdin of tee will appear on stdout and in the file (create the file if not exist) (-a will make it appended to the file)
+./cp file1 file2	# copy the content of file1 to file2 (create file2 if not exist)
+make clean

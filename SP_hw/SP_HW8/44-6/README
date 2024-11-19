@@ -1,0 +1,6 @@
+Example usage of this application:
+first make server run in background then run client to send requests. For example, on the command line:
+./server &
+./client 2
+./client 3
+./client

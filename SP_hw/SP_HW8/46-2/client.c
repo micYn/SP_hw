@@ -6,7 +6,7 @@
 #include <sys/msg.h>
 #include "seqnum.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]){
     struct message msg;
     int msgid;
     int increment = (argc > 1) ? atoi(argv[1]) : 1;

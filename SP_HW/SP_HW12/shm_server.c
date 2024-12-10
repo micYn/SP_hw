@@ -57,16 +57,26 @@ int main(int argc, char **argv) {
 	 * and the text of the result will be returned as the answer.
 	 *
 	 * Fill in code. */
+	shmid = shmget(key, sizeof(Dictrec), IPC_CREAT | 0666);
+	if(shmid==-1)
+		DIE("shmget");
 
 	/* Allocate a group of two semaphores.  Use same key as for shmem.
 	 * Fill in code. */
+	semid = semget(key, 2, IPC_CREAT | 0666);
+	if (semid == -1)
+		DIE("semget");
 
 	/* Get shared memory virtual address.
 	 * Fill in code. */
+	shm = (Dictrec *)shmat(shmid, NULL, 0);
+	if (shm == (void *)-1)
+		DIE("shmat");
 
 	/* Set up semaphore group. */
 	setit.array = vals;
-	/* Fill in code. */
+	if (semctl(semid, 0, SETALL, setit) == -1)
+		DIE("semctl");
 
 	/* Main working loop */
 	for (;;) {
@@ -76,6 +86,8 @@ int main(int argc, char **argv) {
 		 * Then we will wait here until the semaphore is non-zero
 		 *
 		 * Fill in code. */
+		if (semop(semid, &wait, 1) == -1)
+			DIE("semop");
 
 		/* Do the lookup here.  Write result directly into shared memory. */
 		switch(lookup(shm,argv[1]) ) {
@@ -91,6 +103,7 @@ int main(int argc, char **argv) {
 		/* Decrement again so that we will block at the top of the for loop again until a client wakes us up again.
 		 *
 		 * Fill in code. */
-
+		if (semop(semid, &wait, 1) == -1)
+			DIE("semop");
 	} /* end for */
 }

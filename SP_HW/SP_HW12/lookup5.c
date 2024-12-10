@@ -38,19 +38,42 @@ int lookup(Dictrec * sought, const char * resource) {
 
 		/* Open the dictionary.
 		 * Fill in code. */
+		fd = open("./fixrec", O_RDONLY);
+		if(fd==-1){
+			perror("open");
+			exit(EXIT_FAILURE);
+		}
 
 		/* Get record count for building the tree. */
 		filsiz = lseek(fd,0L,SEEK_END);
 		numrec = filsiz / sizeof(Dictrec);
+		lseek(fd, 0, SEEK_SET);
 
 		/* mmap the data.
 		 * Fill in code. */
+		table = mmap(NULL, filsiz, PROT_READ, MAP_SHARED, fd, 0);
 		
 		close(fd);
 	}
 
 	/* search table using bsearch
 	 * Fill in code. */
+	int start = 0, end = numrec;
+	int cnt = 0;
+	found = NULL;
+	while(start != end){
+		int mid = (end + start) / 2;
+		int offset = mid * sizeof(Dictrec);
+		int result = dict_cmp((void *)&((table + mid)->word), (void *)sought);
+		if(result == 0){
+			found = (table + mid);
+			break;
+		}
+		else if(result < 0) start = mid;
+		else if(result > 0) end = mid;
+		cnt += 1;
+		if(cnt == 100) break;
+	}
 	if (found) {
 		strcpy(sought->text,found->text);
 		return FOUND;

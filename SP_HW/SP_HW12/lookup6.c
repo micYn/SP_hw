@@ -15,7 +15,7 @@
 #include <sys/shm.h>
 #include <sys/sem.h>
 #include <stdlib.h>
-#include <string.h
+#include <string.h>
 
 #include "dict.h"
 
@@ -34,27 +34,44 @@ int lookup(Dictrec * sought, const char * resource) {
 
 		/* Connect to shared memory.
 		 * Fill in code. */
+		shmid = shmget(key, sizeof(Dictrec), 0666);
+		if (shmid == -1)
+			DIE("shmget");
 
 		/* Get shared memory virtual address.
 		 * Fill in code. */
+		shm = (Dictrec *)shmat(shmid, NULL, 0);
+		if (shm == (void *)-1)
+			DIE("shmat");
 
 		/* Get semaphore.
 		 * Fill in code. */
+		semid = semget(key, 2, 0666);
+		if (semid == -1)
+			DIE("semget");
 	}
 
 	/* Reserve semaphore so other clients will wait.
 	 * Fill in code. */
+	if (semop(semid, &grab, 1) == -1)
+		DIE("semop: grab");
 
 	strcpy(shm->word,sought->word);
 
 	/* Alert server.  Bump semaphore 1 up by 2.
 	 * Fill in code. */
+	if (semop(semid, &alert, 1) == -1)
+		DIE("semop: alert");
 
 	/* Wait for server to finish.  Server will have set sem 1 to zero.
 	 * Fill in code. */
+	if (semop(semid, &await, 1) == -1)
+		DIE("semop: await");
 
 	/* Done using the server.  Release to other clients.
 	 * Fill in code. */
+	if (semop(semid, &release, 1) == -1)
+		DIE("semop: release");
 
 	if (strcmp(shm->text,"XXXX") != 0) {
 		strcpy(sought->text,shm->text);

@@ -1,3 +1,2 @@
 ### NSYSU CSE385 Network System Programming
-##### assignments, okay.
-#####    quizzes, not good.
+##### assignments, okay. &nbsp;&nbsp;quizzes, not good.

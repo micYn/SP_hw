@@ -3,6 +3,7 @@
  */
 
 #include <stdio.h>
+#include <unistd.h>
 
 #define WORD 32
 #define TEXT 480

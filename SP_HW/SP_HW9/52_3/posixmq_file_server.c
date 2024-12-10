@@ -22,9 +22,10 @@ grimReaper(int sig)
 void serveRequest(const struct req *request)
 {
 	mqd_t client_mqd = mq_open(request->clientmq_name, O_WRONLY);
+	// mqd_t client_mqd = server_mqd;
 	if(client_mqd==(mqd_t)-1)
 	{
-		perror("mq_open");
+		perror("mq_open serveRequest");
 		exit(EXIT_FAILURE);
 	}
 	struct res response;

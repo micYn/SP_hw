@@ -3,4 +3,4 @@ Could be used like this:
 	./server &
 	./client <filename>
 	kill %1
-Note that file should be already exist and could be opened by the server
+Note that file should be already exist and is able to be opened by the server
